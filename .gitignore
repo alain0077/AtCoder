@@ -1,2 +1,5 @@
 # exeファイルは無視する
 *.exe
+
+# .vscode
+.vscode
