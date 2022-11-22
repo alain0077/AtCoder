@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <map>
 
 #define ll long long
 
@@ -11,54 +12,88 @@ int main()
     ll h,w,r,c;
     int n;
     cin >> h >> w >> c >> r;
-    c -= 1;
-    r -= 1;
 
     cin >> n;
-
-    vector<bool> bc(h, false);
-    vector<bool> br(w, false);
+    map<ll,vector<ll>> bc, br;
 
     for(int i = 0; i < n; i++) {
         int y, x;
         cin >> y >> x;
-        bc[y - 1] = true;
-        br[x - 1] = true;
+        bc[y].push_back(x);
+        br[x].push_back(y);
     }
+
+    for(auto &p : bc) sort(p.second.begin(), p.second.end());
+    for(auto &p : br) sort(p.second.begin(), p.second.end());
 
     int q;
     cin >> q;
 
     for(int i = 0; i < q; i++) {
         char d;
-        ll num, dy = 0, dx = 0;
+        ll num;
 
         cin >> d >> num;
 
         if(d == 'L') {
-            dy = 0;
-            dx = -1;
+            ll l_limit = 1;
+            
+            auto it = bc.find(c);
+            if(it != bc.end()) {
+                auto v = it->second;
+                auto it2 = upper_bound(v.begin(), v.end(), r);
+                
+                if(it2 != v.begin()) {
+                    it2--;
+                    l_limit = *it2 + 1;
+                }
+            }
+            r = max(r - num, l_limit);
         }
         if(d == 'R') {
-            dy = 0;
-            dx = 1;
+            ll u_limit = w;
+            
+            auto it = bc.find(c);
+            if(it != bc.end()) {
+                auto v = it->second;
+                auto it2 = upper_bound(v.begin(), v.end(), r);
+                
+                if(it2 != v.end()) {
+                    u_limit = *it2 - 1;
+                }
+            }
+            r = min(r + num, u_limit);
         }
         if(d == 'U') {
-            dy = -1;
-            dx = 0;
+            ll l_limit = 1;
+            
+            auto it = br.find(r);
+            if(it != br.end()) {
+                auto v = it->second;
+                auto it2 = upper_bound(v.begin(), v.end(), c);
+                
+                if(it2 != v.begin()) {
+                    it2--;
+                    l_limit = *it2 + 1;
+                }
+            }
+            c = max(c - num, l_limit);
         }
         if(d == 'D') {
-            dy = 1;
-            dx = 0;
+            ll u_limit = h;
+            
+            auto it = br.find(r);
+            if(it != br.end()) {
+                auto v = it->second;
+                auto it2 = upper_bound(v.begin(), v.end(), c);
+                
+                if(it2 != v.end()) {
+                    u_limit = *it2 - 1;
+                }
+            }
+            c = min(c + num, u_limit);
         }
 
-        for(int j = 0; j < num; j++) {
-            if(0 > c + dy || 0 > r + dx || h <= c + dy || w <= r + dx || (bc[c + dy] && br[r + dx])) break;
-
-            c += dy;
-            r += dx;
-        }
-
-        cout << c + 1 << " " << r + 1 << endl;
+        cout << c << " " << r << endl;
     }
 }
