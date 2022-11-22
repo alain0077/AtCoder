@@ -40,7 +40,7 @@ int main()
             if(e[v] == 0) pq.push(v);
         }
     }
-
+    
     if(ans.size() != n) cout << -1;
     else {
         for(int i = 0; i < n; i++) 
