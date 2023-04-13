@@ -5,32 +5,18 @@ using namespace std;
 
 int main()
 {
-    int n, q;
-    cin >> n >> q;
+    int n, sum = 0;
+    cin >> n;
 
-    map<int, int> flag;
-    
-    for(int i = 0; i < q; i++) 
+    for(int i = 0; i < 5 * n; i++)
     {
-        int ev, x;
-        cin >> ev >> x;
+        int x;
+        cin >> x;
 
-        if(ev == 1)
-        {
-            flag[x]++;
-        }
-        
-        if(ev == 2)
-        {
-            flag[x] = 2;
-        }
-
-        if(ev == 3)
-        {
-            if(flag[x] != 2) cout << "No" << endl;
-            else cout << "Yes" << endl;
-        }
+        if(i >= n && i <= 5*n - n) sum += x;
     }
+
+    cout << sum 
 
     return 0;
 }
