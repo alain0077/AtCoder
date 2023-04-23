@@ -1,43 +1,37 @@
 #include <iostream>
-
-#define ll long long
+#include <map>
 
 using namespace std; 
 
 int main()
 {
-    int n;
+    int n, x = 0, y = 0;
+    string s;
+    map<pair<int, int>, int> flag;
+
     cin >> n;
+    cin >> s;
 
-    ll ans = 0;
+    flag[make_pair(x, y)]++;
 
-    // AB == N - CD
-    // N * √N
-    for(int i = 1; i < n; i++)
+    for(int i = 0; i < s.size(); i++)
     {
-        int ab = n - i, cd = i;
-        ll cnt1 = 0, cnt2 = 0; 
+        if(s[i] == 'R') x++;
+        if(s[i] == 'L') x--;
+        if(s[i] == 'U') y++;
+        if(s[i] == 'D') y--;
 
-        for(int j = 1; j*j <= ab; j++)
+        if(flag[make_pair(x, y)])
         {
-            if(ab % j == 0) 
-            {
-                cnt1++;
-                if(ab != j*j) cnt1++;
-            }
+            cout << "Yes" << endl;
+            return 0;
         }
-
-        for(int j = 1; j*j <= cd; j++)
+        else 
         {
-            if(cd % j == 0)
-            { 
-                cnt2++;
-                if(cd != j*j) cnt2++;
-            }
+            flag[make_pair(x, y)]++;
         }
-
-        ans += cnt1 * cnt2;
     }
 
-    cout << ans << endl;
+    cout << "No" << endl;
+    return 0;
 }
